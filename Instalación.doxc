@@ -1,0 +1,98 @@
+Para que tu sistema biométrico profesional funcione, necesitamos realizar una instalación técnica precisa. No basta con crear un archivo; debemos configurar el motor de base de datos, el entorno de programación y el cableado físico.
+
+Aquí tienes la guía definitiva **"paso a paso"** para instalar todo desde cero.
+
+---
+
+## 1. Configuración de la Base de Datos (PostgreSQL)
+
+El archivo `biometrico_db` no es un documento de texto, es una **base de datos relacional**. Sigue estos pasos para instalarla en tu computadora:
+
+1.  **Descarga:** Ve a [postgresql.org](https://www.postgresql.org/download/) y descarga la versión para tu sistema operativo.
+2.  **Instalación:** Ejecuta el instalador. Durante el proceso, te pedirá una **contraseña para el usuario `postgres`**. ¡Anótala! La usaremos en el código Python.
+3.  **Crear la BD:** 
+    *   Abre el programa **pgAdmin 4** (se instala con PostgreSQL).
+    *   En el panel izquierdo, despliega "Servers", haz clic derecho en "Databases" -> **Create** -> **Database...**
+    *   Ponle de nombre: `biometrico_db`.
+4.  **Ejecutar el Script SQL:**
+    *   Haz clic derecho sobre la nueva base de datos `biometrico_db` y selecciona **Query Tool**.
+    *   Pega el código SQL que te di anteriormente (el que crea las tablas `usuarios` y `registros_acceso`).
+    *   Presiona el icono del rayo (**Execute**) para crear las tablas.
+
+---
+
+## 2. Conexión Física del Hardware (ESP32 + Sensor AS608)
+
+El cableado debe ser exacto para evitar quemar los componentes. El sensor AS608 suele tener 4 cables principales (a veces 6, pero usamos 4).
+
+### Esquema de Conexión:
+
+| Sensor AS608 | ESP32 (Pin GPIO) | Descripción |
+| :--- | :--- | :--- |
+| **VCC (Rojo)** | **3.3V** | Alimentación (Cuidado: algunos sensores requieren 5V, revisa tu modelo) |
+| **GND (Negro)** | **GND** | Tierra |
+| **TX (Blanco)** | **GPIO 16 (RX2)** | Transmisión de datos |
+| **RX (Verde)** | **GPIO 17 (TX2)** | Recepción de datos |
+
+**Otros componentes:**
+*   **Relé (Cerradura):** Conecta el pin de señal al **GPIO 26**.
+*   **Buzzer:** Conecta el positivo al **GPIO 27** y el negativo a **GND**.
+*   **Pantalla LCD I2C:** 
+    *   SDA -> **GPIO 21**
+    *   SCL -> **GPIO 22**
+    *   VCC -> **5V**
+    *   GND -> **GND**
+
+
+
+---
+
+## 3. Instalación del Software en el ESP32
+
+Para que el código funcione, tu computadora debe "enseñarle" al ESP32 cómo hablar con el sensor y con el WiFi.
+
+1.  **Instalar Arduino IDE:** Descárgalo de [arduino.cc](https://www.arduino.cc/en/software).
+2.  **Configurar ESP32:** 
+    *   Ve a *Archivo* -> *Preferencias*. En "Gestor de URLs Adicionales de Tarjetas" pega esto: `https://dl.espressif.com/dl/package_esp32_index.json`
+    *   Ve a *Herramientas* -> *Placa* -> *Gestor de tarjetas*, busca "esp32" e instálalo.
+3.  **Instalar Librerías (CRÍTICO):** Ve a *Programa* -> *Incluir Librería* -> *Administrar Bibliotecas* y busca e instala:
+    *   **Adafruit Fingerprint Sensor Library**
+    *   **ArduinoJson** (de Benoit Blanchon)
+    *   **LiquidCrystal I2C**
+4.  **Cargar el Código:**
+    *   Copia el código C++ que te di en el Módulo 1.
+    *   **IMPORTANTE:** Cambia la dirección IP en `serverURL` por la IP local de tu computadora (la obtienes escribiendo `ipconfig` en la terminal de Windows). Ejemplo: `http://192.168.1.15:8000/api/acceso`.
+    *   Conecta el ESP32 por USB y presiona **Subir** (flecha derecha).
+
+---
+
+## 4. Instalación del Servidor en la Computadora (Backend Python)
+
+Este es el programa que recibe los datos de la puerta y los guarda en PostgreSQL.
+
+1.  **Instalar Python:** Descárgalo de [python.org](https://www.python.org/). Asegúrate de marcar la casilla **"Add Python to PATH"**.
+2.  **Instalar dependencias:** Abre una terminal (CMD o PowerShell) y escribe:
+    ```bash
+    pip install fastapi uvicorn psycopg2-binary pydantic
+    ```
+3.  **Configurar la conexión:** En el archivo `main.py`, busca la sección `DB_CONFIG` y asegúrate de que la contraseña coincida con la que pusiste en el paso 1.
+4.  **Ejecutar:** En la terminal, dentro de la carpeta donde está tu archivo, escribe:
+    ```bash
+    uvicorn main:app --host 0.0.0.0 --port 8000
+    ```
+    *El `--host 0.0.0.0` es fundamental para que el ESP32 pueda ver a la computadora a través del WiFi.*
+
+---
+
+## 5. Funcionamiento por Roles (Resumen Pro)
+
+Una vez instalado, así es como interactúan los roles que mencionaste:
+
+*   **Director / Administrador:** Es quien instala todo lo anterior. Usa la base de datos para registrar inicialmente a los docentes (asignándoles nombre y CI a un ID de huella).
+*   **Secretaria:** Abre el archivo `index.html` en su navegador. Ella no instala nada, solo supervisa. Si ve a un docente en **rojo** en la pantalla, debe informar al Director. Ella registra los datos personales de los nuevos docentes cuando el Director les toma la huella.
+*   **Docentes:** Solo usan el sensor de huella en la puerta. Su única función es poner el dedo correctamente y esperar el pitido de éxito.
+
+
+
+**¿Tienes todos los componentes físicos listos o te falta algún cable para que revisemos la conexión?**
+```
