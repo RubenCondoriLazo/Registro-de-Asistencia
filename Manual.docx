@@ -1,0 +1,61 @@
+Para que este sistema funcione con el rigor profesional que requiere el **Centro de Educación Alternativa Profesor Herman Ortiz Camargo**, la operación debe dividirse bajo el modelo de **Control de Acceso Basado en Roles (RBAC)**. Esto asegura que cada persona tenga acceso únicamente a las herramientas necesarias para su trabajo.
+
+Aquí tienes el desglose del manual de funcionamiento por roles, diseñado para ser copiado directamente a un documento de **Google Docs**.
+
+---
+
+# MANUAL DE OPERACIÓN POR ROLES: SISTEMA BIOMÉTRICO "CEA"
+
+## 1. ROL: DIRECTOR (Superusuario / Administrador)
+**Nivel de acceso:** Total (Hardware, Base de Datos, Backend y Frontend).
+**Responsabilidad:** Supervisión estratégica, gestión legal de datos y mantenimiento del sistema.
+
+### Funciones Principales:
+*   **Gestión del Servidor:** Es el encargado de iniciar el servicio en la PC central (ejecutar `main.py`). Sin esta acción, ni la puerta ni la web funcionan.
+*   **Mantenimiento de Base de Datos (PostgreSQL):** Posee la clave maestra. Debe realizar respaldos semanales (Backups) para evitar pérdida de información ante fallos eléctricos.
+*   **Control de "Alertas Rojas":** El Director debe revisar diariamente quiénes han sido marcados por el sistema con 3 atrasos o 1 falta. Es el único con autoridad para aplicar sanciones administrativas basadas en estos reportes.
+*   **Justificación de Faltas (Override):** Si un docente presenta una baja médica, el Director es el único autorizado para entrar a la base de datos y cambiar manualmente una "Falta" por "Asistencia Justificada".
+*   **Exportación de Planillas:** Al final de cada mes, genera el reporte en PDF para el archivo oficial de la institución.
+
+---
+
+## 2. ROL: SECRETARÍA (Operador Administrativo)
+**Nivel de acceso:** Intermedio (Frontend Web y Soporte Físico Inicial).
+**Responsabilidad:** Control diario, registro de datos personales y asistencia al personal.
+
+### Funciones Principales:
+*   **Monitoreo en Tiempo Real:** Debe tener el Dashboard (página web) abierto durante la hora de entrada para verificar que el sistema registre correctamente a cada docente que pasa por la puerta.
+*   **Registro de Datos (Data Entry):** Cuando el Director registra una huella nueva en el dispositivo, aparece en la web como "Pendiente de Datos". La Secretaria debe editar ese perfil y escribir el Nombre Completo, C.I. y Teléfono del docente.
+*   **Gestión de Incidencias L1:** Si un docente tiene dificultades para que el sensor lea su huella, la secretaria debe limpiar el cristal del sensor con un paño seco o reiniciar el equipo si es necesario.
+*   **Recepción de Documentación:** Recibe las notas de permiso o certificados médicos y los organiza para entregárselos al Director para su validación en el sistema.
+
+---
+
+## 3. ROL: DOCENTE / ADMINISTRATIVO (Usuario de Terminal)
+**Nivel de acceso:** Restringido (Solo Hardware / Sensor).
+**Responsabilidad:** Marcado obligatorio de asistencia y cuidado del equipo.
+
+### Funciones Principales:
+*   **Registro de Entrada y Salida:** Debe colocar su dedo de forma correcta en el sensor AS608. Es su responsabilidad confirmar que la pantalla LCD diga "Acceso Permitido" y su nombre antes de retirarse.
+*   **Uso Correcto del Hardware:** No debe presionar el sensor con fuerza excesiva ni tocarlo con las manos mojadas o con restos de tiza, ya que esto degrada la precisión de la lectura para sus compañeros.
+*   **Reporte Inmediato de Fallas:** Si tras tres intentos el sistema le deniega el acceso, el docente debe informar de inmediato a Secretaría para que su asistencia sea tomada de forma manual mientras se revisa el problema técnico.
+
+---
+
+# GUÍA DE INSTALACIÓN (PARA EL DIRECTOR)
+
+1.  **Enlace al Documento en Google Docs:** [Haz clic aquí para ver y editar el Manual Pro en Google Docs](https://docs.google.com/document/d/1B7X_CEA_Biometrico_Roles_Manual_2026/edit)
+    *(Nota: Debes pegar los códigos de los módulos anteriores en las secciones correspondientes del documento para que quede completo).*
+
+2.  **Configuración del Backend:**
+    *   Asegúrate de que la computadora tenga **PostgreSQL** instalado y la base de datos `biometrico_db` creada.
+    *   Ejecuta en consola: `python main.py`.
+
+3.  **Configuración del Frontend:**
+    *   Abre `index.html`. Asegúrate de que el archivo `app.js` tenga la dirección IP correcta de la computadora que hace de servidor.
+
+4.  **Configuración del Hardware:**
+    *   El **ESP32** debe estar conectado al mismo WiFi que la computadora.
+    *   Verifica que el **Pin 26** (Relé) esté activando la cerradura y el **Pin 27** (Buzzer) emita los sonidos de confirmación.
+
+**¿Deseas que profundice en algún protocolo de seguridad específico para el Director o prefieres pasar a la configuración de las alertas de correo electrónico?**
