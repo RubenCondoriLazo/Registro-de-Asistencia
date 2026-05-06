@@ -1,0 +1,192 @@
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --bg-color: #f3f4f6;
+    --sidebar-bg: #111827;
+    --text-main: #1f2937;
+    --text-light: #9ca3af;
+    --white: #ffffff;
+    --danger-bg: #fee2e2;
+    --danger-text: #b91c1c;
+    --success-bg: #dcfce3;
+    --success-text: #166534;
+    --border-color: #e5e7eb;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body { background-color: var(--bg-color); color: var(--text-main); }
+
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-area {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #374151;
+}
+
+.logo-icon { font-size: 24px; color: #3b82f6; }
+
+.menu { display: flex; flex-direction: column; padding: 20px 0; }
+
+.menu a {
+    padding: 15px 25px;
+    color: var(--text-light);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: 0.3s;
+}
+
+.menu a:hover, .menu a.active {
+    background-color: #1f2937;
+    color: var(--white);
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    height: 70px;
+    background-color: var(--white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-bar {
+    background-color: var(--bg-color);
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 300px;
+}
+
+.search-bar input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+}
+
+.user-profile { display: flex; align-items: center; gap: 15px; font-weight: 500; }
+.avatar { font-size: 30px; color: var(--primary-color); }
+
+/* Content Area */
+.content-area { padding: 30px; }
+
+.header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.filter-group { display: flex; gap: 15px; align-items: center; }
+
+.custom-select {
+    padding: 8px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    outline: none;
+}
+
+.btn-exportar {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-exportar:hover { background-color: var(--secondary-color); }
+
+/* Cards */
+.summary-cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card h3 { color: var(--text-light); font-size: 14px; text-transform: uppercase; margin-bottom: 10px; }
+.card-number { font-size: 32px; font-weight: bold; color: var(--text-main); }
+.card.warning .card-number { color: var(--danger-text); }
+
+/* Table */
+.table-container {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th, td { padding: 15px 20px; border-bottom: 1px solid var(--border-color); }
+th { background-color: #f8fafc; font-weight: 600; color: #475569; }
+tbody tr:hover { background-color: #f1f5f9; }
+
+/* Etiquetas de Estado */
+.badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge.ok { background-color: var(--success-bg); color: var(--success-text); }
+.badge.danger { background-color: var(--danger-bg); color: var(--danger-text); }
+
+/* ==== LÓGICA DE ALERTA ROJA (Requerimiento Principal) ==== */
+.alerta-critica {
+    background-color: #fff1f2 !important; /* Fondo ligeramente rojo */
+}
+
+.alerta-critica td {
+    color: var(--danger-text);
+    font-weight: 500;
+}
+
+.alerta-critica td:first-child {
+    border-left: 4px solid var(--danger-text);
+}
