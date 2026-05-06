@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Biométrico | Panel de Administración</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Barra Lateral -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <i class="fa-solid fa-fingerprint logo-icon"></i>
+                <h2>Control CEA</h2>
+            </div>
+            <nav class="menu">
+                <a href="#" class="active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#"><i class="fa-solid fa-users"></i> Usuarios</a>
+                <a href="#"><i class="fa-solid fa-calendar-check"></i> Reportes</a>
+                <a href="#"><i class="fa-solid fa-gear"></i> Configuración</a>
+            </nav>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="search-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="busqueda" placeholder="Buscar por CI o Nombre...">
+                </div>
+                <div class="user-profile">
+                    <span class="admin-name">Director / Administrador</span>
+                    <i class="fa-solid fa-circle-user avatar"></i>
+                </div>
+            </header>
+
+            <section class="content-area">
+                <div class="header-actions">
+                    <h1 class="page-title">Reporte de Asistencia</h1>
+                    
+                    <!-- Filtros de Tiempo -->
+                    <div class="filter-group">
+                        <label for="periodo">Vista:</label>
+                        <select id="periodo" class="custom-select">
+                            <option value="semanal">Semanal</option>
+                            <option value="mensual" selected>Mensual</option>
+                            <option value="anual">Anual</option>
+                        </select>
+                        <button class="btn-exportar" onclick="exportarPDF()"><i class="fa-solid fa-file-pdf"></i> Exportar</button>
+                    </div>
+                </div>
+
+                <!-- Tarjetas de Resumen -->
+                <div class="summary-cards">
+                    <div class="card">
+                        <h3>Total Registrados</h3>
+                        <p id="total-users" class="card-number">--</p>
+                    </div>
+                    <div class="card warning">
+                        <h3>En Riesgo (Atrasos/Faltas)</h3>
+                        <p id="total-alerts" class="card-number">--</p>
+                    </div>
+                </div>
+
+                <!-- Tabla de Datos -->
+                <div class="table-container">
+                    <table id="tabla-asistencia">
+                        <thead>
+                            <tr>
+                                <th>ID Biométrico</th>
+                                <th>Nombre Completo</th>
+                                <th>C.I.</th>
+                                <th>Asistencias</th>
+                                <th>Atrasos</th>
+                                <th>Faltas</th>
+                                <th>Estado General</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-cuerpo">
+                            <!-- Los datos se inyectarán aquí mediante JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
